@@ -12,8 +12,9 @@ except ImportError:
     from urllib import urlretrieve
 
 def download_data():
-    data_folder = config.DATA.BASE
-    if not os.path.exists(os.path.join(data_folder, "midi")):
+    data_folder = config.DATA.MIDI
+    if not os.path.exists(data_folder):
+        os.makedirs(data_folder)
         filename = os.path.join(data_folder, "scale_chords.zip")
         if not os.path.exists(filename):
             url = "http://www.feelyoursound.com/data/scale_chords_small.zip"
