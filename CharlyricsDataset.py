@@ -15,21 +15,35 @@ class CharLyricsDataset(Dataset):
     def __init__(self, folder_path, transform=None):
         self.folder_path = folder_path
         self.artists = self.get_artist_list()
+        self.num_artists = len(self.artists)
         self.transform = transform
 
     def __len__(self):
         return len(self.artists)
 
     def __getitem__(self, idx):
-        return self.artists[idx]
+        artist = self.artists[idx]
+        raw_lyrics = ""
+        try:
+            with open(os.path.join(self.folder_path, f"{artist}.txt"), "r") as f:
+                raw_lyrics += f.read()
+        except IOError as e:
+            print(f"I/O error, {e.errno} {e.strerror}")
+        return raw_lyrics
 
     def get_artist_list(self):
         files_list = map(
             lambda filepath: Path(filepath).stem,
             glob.glob(os.path.join(self.folder_path, "*.txt")),
         )
-        # remove -, _ and capitalize
-        names_list = map(
-            lambda string_: string_.replace("-", " ").replace("_", " ").title(), files_list
-        )
-        return list(names_list)
+        # # remove -, _ and capitalize
+        # names_list = map(
+        #     lambda string_: string_.replace("-", " ").replace("_", " ").title(),
+        #     files_list,
+        # )
+        return list(files_list)
+
+
+if __name__ == "__main__":
+    obj = CharLyricsDataset(config.DATA.LYRICS)
+    obj[0]
