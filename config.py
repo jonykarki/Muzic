@@ -15,5 +15,5 @@ _C.DATA.LYRICS = os.path.join(_C.BASEPATH, "lyrics")
 # train parameters
 _C.TRAIN = edict()
 _C.TRAIN.MAX_LEN = 100
-_C.TRAIN.BATCH_SIZE = 4
+_C.TRAIN.BATCH_SIZE = 3
 _C.TRAIN.EPOCHS = 10

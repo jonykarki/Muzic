@@ -24,11 +24,13 @@ class CharLyricsDataset(Dataset):
         return len(self.artists)
 
     def __getitem__(self, idx):
-        return utils.char_to_label(
-            self.raw_combined_lyrics[
-                idx * config.TRAIN.MAX_LEN : idx * config.TRAIN.MAX_LEN
-                + config.TRAIN.MAX_LEN
-            ]
+        return torch.tensor(
+            utils.char_to_label(
+                self.raw_combined_lyrics[
+                    idx * config.TRAIN.MAX_LEN : idx * config.TRAIN.MAX_LEN
+                    + config.TRAIN.MAX_LEN
+                ]
+            )
         )
 
     def get_all_lyrics(self):
