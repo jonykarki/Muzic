@@ -3,6 +3,7 @@ import os
 import glob
 import torch
 import numpy as np
+import utils
 from pathlib import Path
 
 from torch.utils.data import Dataset, DataLoader
@@ -16,17 +17,26 @@ class CharLyricsDataset(Dataset):
         self.folder_path = folder_path
         self.artists = self.get_artist_list()
         self.num_artists = len(self.artists)
+        self.raw_combined_lyrics = self.get_all_lyrics()
         self.transform = transform
 
     def __len__(self):
         return len(self.artists)
 
     def __getitem__(self, idx):
-        artist = self.artists[idx]
+        return utils.char_to_label(
+            self.raw_combined_lyrics[
+                idx * config.TRAIN.MAX_LEN : idx * config.TRAIN.MAX_LEN
+                + config.TRAIN.MAX_LEN
+            ]
+        )
+
+    def get_all_lyrics(self):
         raw_lyrics = ""
         try:
-            with open(os.path.join(self.folder_path, f"{artist}.txt"), "r") as f:
-                raw_lyrics += f.read()
+            for artist in self.artists:
+                with open(os.path.join(self.folder_path, f"{artist}.txt"), "r") as f:
+                    raw_lyrics += f.read()
         except IOError as e:
             print(f"I/O error, {e.errno} {e.strerror}")
         return raw_lyrics
