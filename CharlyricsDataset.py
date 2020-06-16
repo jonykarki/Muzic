@@ -33,8 +33,8 @@ class CharLyricsDataset(Dataset):
         )
 
         # return the padded sequences to feed into the RNN
-        input_seq = item[:-1]
-        output_seq = item[1:]
+        input_seq = item[:-1] + [100]
+        output_seq = item[1:] + [-100]
 
         return (torch.tensor(input_seq), torch.tensor(output_seq))
 
