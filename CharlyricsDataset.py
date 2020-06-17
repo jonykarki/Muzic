@@ -2,9 +2,11 @@ from __future__ import print_function
 import os
 import glob
 import torch
+import pandas as pd
 import numpy as np
 import utils
 from pathlib import Path
+import string
 
 from torch.utils.data import Dataset, DataLoader
 from config import config
@@ -16,13 +18,11 @@ class CharLyricsDataset(Dataset):
     def __init__(self, folder_path, max_len, transform=None):
         self.folder_path = folder_path
         self.max_len = max_len
-        self.artists = self.get_artist_list()
-        self.num_artists = len(self.artists)
         self.raw_combined_lyrics = self.get_all_lyrics()
         self.transform = transform
 
     def __len__(self):
-        return len(self.artists)
+        return len(self.raw_combined_lyrics)//self.max_len
 
     def __getitem__(self, idx):
         # return the max_len number of chars starting from max_len*idx
@@ -40,13 +40,21 @@ class CharLyricsDataset(Dataset):
 
     def get_all_lyrics(self):
         raw_lyrics = ""
-        try:
-            for artist in self.artists:
-                with open(os.path.join(self.folder_path, f"{artist}.txt"), "r") as f:
-                    raw_lyrics += f.read()
-        except IOError as e:
-            print(f"I/O error, {e.errno} {e.strerror}")
+        for c in string.ascii_lowercase:
+            df = pd.read_csv(os.path.join(self.folder_path, f"azlyrics_lyrics_{c}.csv"), usecols=range(5))
+            for i, j in df.iterrows():
+                raw_lyrics += str(j["LYRICS"])
         return raw_lyrics
+
+    # def get_all_lyrics_PREV(self):
+    #     raw_lyrics = ""
+    #     try:
+    #         for artist in self.artists:
+    #             with open(os.path.join(self.folder_path, f"{artist}.txt"), "r") as f:
+    #                 raw_lyrics += f.read()
+    #     except IOError as e:
+    #         print(f"I/O error, {e.errno} {e.strerror}")
+    #     return raw_lyrics
 
     def get_artist_list(self):
         files_list = map(
@@ -62,5 +70,5 @@ class CharLyricsDataset(Dataset):
 
 
 if __name__ == "__main__":
-    obj = CharLyricsDataset(config.DATA.LYRICS)
-    obj[0]
+    obj = CharLyricsDataset(config.DATA.LYRICS, 100)
+    print(obj[0])

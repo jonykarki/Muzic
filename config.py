@@ -10,7 +10,7 @@ _C.BASEPATH = os.path.abspath(os.pardir)
 _C.DATA = edict()
 _C.DATA.BASE = os.path.join(_C.BASEPATH, "data")
 _C.DATA.MIDI = os.path.join(_C.DATA.BASE, "midi")
-_C.DATA.LYRICS = os.path.join(_C.BASEPATH, "lyrics")
+_C.DATA.LYRICS = os.path.join(_C.BASEPATH, "azlyrics-scraper")
 
 # train parameters
 _C.TRAIN = edict()
