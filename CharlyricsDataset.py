@@ -40,7 +40,7 @@ class CharLyricsDataset(Dataset):
 
     def get_all_lyrics(self):
         raw_lyrics = ""
-        for c in string.ascii_lowercase:
+        for c in ['a']:
             df = pd.read_csv(os.path.join(self.folder_path, f"azlyrics_lyrics_{c}.csv"), usecols=range(5))
             for i, j in df.iterrows():
                 raw_lyrics += str(j["LYRICS"])
