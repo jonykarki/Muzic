@@ -14,7 +14,7 @@ _C.DATA.LYRICS = os.path.join(_C.BASEPATH, "lyrics")
 
 # train parameters
 _C.TRAIN = edict()
-_C.TRAIN.LEARNING_RATE = 0.003
+_C.TRAIN.LEARNING_RATE = 0.008
 _C.TRAIN.MAX_LEN = 100
 _C.TRAIN.HIDDEN_SIZE = 512
 _C.TRAIN.LSTM_N_LAYERS = 2
